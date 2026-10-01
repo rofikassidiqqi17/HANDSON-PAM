@@ -1,18 +1,10 @@
-rootProject.name = "handson-p1-intro-kmp"
+rootProject.name = "pertemuan-2-coroutines-flow"
 
-pluginManagement {
-    repositories {
-        google()
-        gradlePluginPortal()
-        mavenCentral()
-    }
-}
-
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-include(":composeApp")
+include(
+    "handson1-latihan",
+    "handson1-solusi",
+    "handson2-latihan",
+    "handson2-solusi",
+    "handson3-latihan",
+    "handson3-solusi"
+)

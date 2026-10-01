@@ -1,6 +1,15 @@
 plugins {
-    alias(libs.plugins.androidApplication) apply false
-    alias(libs.plugins.kotlinMultiplatform) apply false
-    alias(libs.plugins.composeMultiplatform) apply false
-    alias(libs.plugins.composeCompiler) apply false
+    kotlin("jvm") version "1.9.24" apply false
+}
+
+subprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    }
 }

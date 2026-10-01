@@ -1,63 +1,57 @@
-# Hands-on Pertemuan 1 — Pengenalan Kotlin Multiplatform & Setup Environment
+# Hands-on Pertemuan 2 — Advanced Kotlin, Coroutines, dan Flow
 
-Proyek Kotlin Multiplatform (KMP) + Compose Multiplatform untuk 3 latihan praktikum Pertemuan 1 (IF25-22017 — Pengembangan Aplikasi Mobile, ITERA).
-
-Berbeda dari `Kotlin Dasar/`, folder ini adalah proyek KMP **sungguhan**: satu modul `composeApp` dengan source set `commonMain` (kode bersama), `androidMain`, `iosMain`, dan `desktopMain` — persis seperti struktur yang dijelaskan di slide `P1 - Pengenalan MK dan Setup Environment.pdf` (hal. 18).
+Proyek Kotlin/JVM untuk 3 latihan praktikum Pertemuan 2 (IF25-22017 — Pengembangan Aplikasi Mobile, ITERA).
 
 ## Capaian Pembelajaran
 
-- Memahami konsep dan arsitektur Kotlin Multiplatform (commonMain/androidMain/iosMain/desktopMain)
-- Berhasil setup development environment (Android Studio + KMP Plugin + JDK 17)
-- Menerapkan pola `expect`/`actual` untuk kode yang berbeda per platform
-- Menggunakan `remember`/`mutableStateOf` untuk state management dasar di Compose
-- Menyusun UI dasar dengan `Column`, `Row`, `Card`, dan `Modifier`
+- Memahami dan menggunakan fitur advanced Kotlin (null safety, extension functions)
+- Menjelaskan konsep dan implementasi Kotlin Coroutines
+- Mengimplementasikan Kotlin Flow untuk data streaming
+- Menerapkan pola asynchronous programming dalam aplikasi mobile
 
 ## Cara Menjalankan
 
-1. Pastikan Android Studio + **Kotlin Multiplatform plugin** sudah terinstall (lihat slide P1 hal. 20-21 jika belum).
-2. Buka folder **"P1 - Pengenalan MK dan Setup Environment - Hands-on"** ini di Android Studio (`File > Open`) sebagai proyek terpisah, lalu tunggu Gradle sync selesai (unduhan pertama kali bisa memakan waktu, perlu koneksi internet stabil).
-3. Pilih salah satu run configuration:
-   - **Android** — pilih configuration `composeApp`, pilih emulator/device, klik ▶️ (atau `./gradlew :composeApp:installDebug`).
-   - **Desktop** — jalankan `./gradlew :composeApp:run` dari terminal (paling cepat untuk coba-coba tanpa emulator).
-   - **iOS** *(khusus Mac + Xcode)* — proyek ini **tidak menyertakan** folder `iosApp/` (proyek Xcode) karena keterbatasan lingkungan pembuatan. Untuk mencoba di iOS: buat proyek baru lewat [kmp.jetbrains.com](https://kmp.jetbrains.com) (Metode 1 di slide hal. 22), lalu salin isi `composeApp/src/` dari folder ini ke proyek barumu.
-4. Di `App.kt`, kamu akan melihat menu untuk berpindah antara Latihan 1-3 dan Solusi 1-3 (menu ini pakai state sederhana, bukan Navigation Component — itu materi Pertemuan 5).
-5. Buka file di `composeApp/src/commonMain/kotlin/.../latihan/`, lengkapi bagian `TODO`, lalu jalankan ulang untuk melihat hasilnya.
+1. Buka folder **"Pertemuan 2 - Hands-on"** ini di Android Studio (`File > Open`) sebagai proyek Gradle terpisah.
+2. Tunggu proses Gradle sync selesai.
+3. Buka file `Latihan.kt` pada modul yang ingin dikerjakan, lengkapi bagian `TODO`.
+4. Klik ikon ▶️ di sebelah `fun main()` untuk menjalankan.
+5. Jika stuck, bandingkan dengan `Solusi.kt` pada modul `-solusi` yang berpasangan.
+
+Setiap latihan adalah modul Gradle terpisah, jadi latihan yang belum selesai (belum bisa di-compile) **tidak akan mengganggu** latihan atau solusi lain.
 
 ## Daftar Latihan
 
-### 1. `Handson1PlatformInfo.kt` — Expect/Actual
-Lengkapi `getGreetingMessage()` agar menampilkan pesan sapaan yang menyebutkan nama platform (`getPlatformName()`), yang nilainya berbeda tergantung platform (Android/iOS/Desktop) berkat pola `expect`/`actual`.
+### 1. `handson1-latihan` / `handson1-solusi` — Coroutines Dasar
+Ambil data dari 2 sumber (`fetchUserProfile`, `fetchUserPosts`) secara **paralel** menggunakan `async`/`await`, lalu gabungkan hasilnya.
 
-- **Konsep:** `expect fun` (commonMain), `actual fun` (androidMain/iosMain/desktopMain).
+- **Target:** waktu eksekusi ~1000ms (bukan ~1800ms jika dijalankan sequential).
+- **Konsep:** `async`, `await`, `Deferred`.
 
-### 2. `Handson2Counter.kt` — State & Recomposition
-Implementasikan counter sederhana dengan tombol `+`/`-` menggunakan `remember { mutableStateOf(0) }`.
+### 2. `handson2-latihan` / `handson2-solusi` — Flow dengan Operators
+Buat Flow yang mensimulasikan sensor suhu (`temperatureSensor`), filter suhu di atas 30°C, transformasikan menjadi pesan warning, lalu tampilkan.
 
-- **Konsep:** `remember`, `mutableStateOf`, recomposition, property delegate `by`.
+- **Konsep:** `flow {}`, `filter`, `map`, `onEach`, `collect`.
 
-### 3. `Handson3ProfileCard.kt` — Layout Dasar
-Susun kartu profil (nama, NIM, platform) menggunakan `Card`, `Column`, `Row`, dan `Modifier`.
+### 3. `handson3-latihan` / `handson3-solusi` — StateFlow untuk Counter
+Implementasikan `CounterManager` menggunakan `StateFlow` dengan fungsi `increment()`, `decrement()` (minimum 0), dan `reset()`.
 
-- **Catatan:** fungsi ini sengaja belum menampilkan apa-apa selain placeholder sebelum semua TODO dilengkapi.
-- **Konsep:** `Card`, layout composable (`Column`/`Row`), `Modifier` yang chainable.
+- **Catatan:** file `Latihan.kt` di modul ini **sengaja tidak bisa di-compile** sebelum kamu melengkapi TODO — itu bagian dari latihan.
+- **Konsep:** `MutableStateFlow`, `StateFlow`, `asStateFlow()`.
 
 ## Troubleshooting
 
-Diambil dari slide P1 hal. 28, plus tambahan untuk hands-on ini:
-
 | Error | Penyebab | Solusi |
 |---|---|---|
-| `Gradle sync failed` | SDK atau JDK tidak ditemukan | Pastikan `JAVA_HOME` dan `ANDROID_HOME` sudah di-set |
-| `SDK location not found` | `local.properties` tidak ada | Buat file `local.properties` berisi `sdk.dir=path/to/sdk` (Android Studio biasanya membuatnya otomatis saat sync pertama) |
-| `Kotlin version mismatch` | Versi Kotlin tidak kompatibel dengan Compose Multiplatform | Update plugin Kotlin & Compose Multiplatform di `gradle/libs.versions.toml` ke pasangan versi yang kompatibel |
-| `iOS build failed` | Xcode tidak terinstall/outdated, atau `iosApp/` belum dibuat | Install Xcode terbaru dari App Store (Mac), lalu buat proyek Xcode via kmp.jetbrains.com seperti dijelaskan di atas |
+| `Suspend function can only be called from coroutine` | Memanggil suspend function dari fungsi biasa | Panggil dari dalam coroutine scope (`launch`, `runBlocking`, `viewModelScope`) |
+| `Flow emission from different coroutine is not allowed` | Emit dari coroutine yang berbeda dalam flow builder | Gunakan `channelFlow` atau `callbackFlow` |
+| `Job was cancelled` / `CancellationException` | Parent scope dibatalkan sebelum child selesai | Handle dengan `try-finally` atau `NonCancellable` |
 
-## Catatan: Tugas Praktikum Minggu 1 (terpisah dari hands-on ini)
+## Tugas Praktikum (terpisah dari hands-on ini)
 
-Ada **Tugas Praktikum Minggu 1** (bobot 4%, deadline sebelum Pertemuan 2) yang meminta memodifikasi Hello World bawaan proyek KMP (bukan proyek hands-on ini): ubah teks menjadi "Halo, [Nama Anda]!", tambahkan NIM, tampilkan nama platform, jalankan di minimal 1 platform, lalu upload ke GitHub repository pribadi. Lihat slide `P1 - Pengenalan MK dan Setup Environment.pdf` halaman 30 untuk detail dan format pengumpulan lengkap.
+Ada tugas besar **"News Feed Simulator"** (bobot 4%, deadline Pertemuan 3) yang menggabungkan Flow, StateFlow, dan Coroutines dalam satu aplikasi. Lihat slide `P2 - Advanced Kotlin Coroutines Flow.pdf` halaman 32–33 untuk detail dan rubrik penilaian. Proyek starter untuk tugas ini belum dibuat — beri tahu jika ingin di-scaffold juga.
 
 ## Sumber Pustaka
 
-- [Kotlin Multiplatform Documentation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
-- [Compose Multiplatform Documentation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-multiplatform.html)
-- [Kotlin Multiplatform Wizard](https://kmp.jetbrains.com)
+- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
+- [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
+- [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
